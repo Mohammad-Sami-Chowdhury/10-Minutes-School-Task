@@ -9,7 +9,7 @@ interface Feature {
 interface Section {
   type: string;
   values: Feature[];
-    name?: string;
+  name?: string;
 }
 
 interface CourseData {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "./componenets/HeroSection";
 import Instructor from "./componenets/Instructor";
 import CourseLaidOut from "./componenets/CourseLaidOut";
@@ -9,11 +9,13 @@ import Question from "./componenets/Question";
 import Sidebar from "./componenets/Sidebar";
 import Navbar from "./componenets/Navbar";
 
+import type { CourseData, Media } from "./type";
+
 function App() {
-  const [courseData, setCourseData] = useState(null);
-  const [currentMedia, setCurrentMedia] = useState(null);
+  const [courseData, setCourseData] = useState<CourseData | null>(null);
+  const [currentMedia, setCurrentMedia] = useState<Media | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [language, setLanguage] = useState<"en" | "bn">("en");
 
@@ -36,12 +38,13 @@ function App() {
         );
         if (!res.ok) throw new Error("Failed to fetch data");
         const data = await res.json();
+
         setCourseData(data.data);
         if (data.data.media && data.data.media.length > 0) {
           setCurrentMedia(data.data.media[0]);
         }
-      } catch (err: any) {
-        setError(err.message || "Unknown error");
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
@@ -64,8 +67,8 @@ function App() {
       <CourseDetails courseData={courseData} />
       <Question courseData={courseData} openIndex={openIndex} toggle={toggle} />
       <Sidebar
-        mediaSection={{ media: courseData.media || [] }}
-        checklistSection={{ checklist: courseData.checklist || [] }}
+        mediaSection={{ media: courseData.media }}
+        checklistSection={{ checklist: courseData.checklist }}
         ctaText={courseData.cta_text?.value || "Enroll Now"}
         currentMedia={currentMedia}
         setCurrentMedia={setCurrentMedia}

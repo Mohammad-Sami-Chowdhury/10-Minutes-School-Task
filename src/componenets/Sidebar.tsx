@@ -24,7 +24,7 @@ interface SidebarProps {
   checklistSection: SectionChecklist;
   ctaText?: string;
   currentMedia: Media | null;
-  setCurrentMedia: (media: Media) => void;
+  setCurrentMedia: React.Dispatch<React.SetStateAction<Media | null>>;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
